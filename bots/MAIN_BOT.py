@@ -1,14 +1,12 @@
-from selenium import webdriver
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.proxy import Proxy, ProxyType
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
-from selenium_stealth import stealth
 
+import undetected_chromedriver as uc
 import json
 import time
 import random
@@ -16,8 +14,6 @@ import threading
 
 
 class MainBot:
-
-    NUMBER_OF_THREADS = 1
 
     def __init__(self, profile_id):
         self.profile_id = profile_id
@@ -33,57 +29,35 @@ class MainBot:
                     return prof
             print(f"Profile with id {self.profile_id} doesn't exist!")
 
-    def __set_driver(self):
+    def _get_driver(self):
         # all the webdriver options should be in this private method
 
-        prx = Proxy()
-        prx.proxy_type = ProxyType.MANUAL
-        prx.http_proxy = self.__profile['proxy']
-        prx.ftpProxy = self.__profile['proxy']
-        prx.socks_proxy = self.__profile['proxy']
-        prx.socks_version = 5
-        prx.ssl_proxy = self.__profile['proxy']
-
-        capabilities = webdriver.DesiredCapabilities.CHROME
-        prx.add_to_capabilities(capabilities)
-
         options = Options()
-        options.add_argument(r'--user-data-dir=C:\Users\USER\AppData\Local\Google\Chrome\User Data\Profile 2')
-        # options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('useAutomationExtension', False)
+        options.add_argument(f'--proxy-server={self.__profile["proxy"]}')
 
         service = Service(executable_path='../helper/chromedriver.exe')
-        driver = webdriver.Chrome(service=service, options=options, desired_capabilities=capabilities)
-
-        stealth(driver,
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
-                languages=["en-US", "en"],
-                vendor="Google Inc.",
-                platform="Win32",
-                webgl_vendor="Intel Inc.",
-                renderer="Intel Iris OpenGL Engine",
-                fix_hairline=True
-                )
+        driver = uc.Chrome(service=service, options=options, use_subprocess=True,
+                           user_data_dir=self.__profile["user_data_dir"])
 
         return driver
+
+    def __main_thread(self):
+        driver = self._get_driver()
+        try:
+            self.__crawl(driver)
+        finally:
+            driver.quit()
 
     def start(self):
         # this is a method-starter that implemented multy-threading functionality
 
-        threads = []
-        for i in range(self.NUMBER_OF_THREADS):
-            t = threading.Thread(target=self.__crawl, name="Thread:" + str(i))
-            time.sleep(3)
+            t = threading.Thread(target=self.__main_thread, name=f"Thread: {threading.active_count()}")
             print('Running thread:', threading.active_count())
-            threads.append(t)
             t.start()
+            time.sleep(5)
 
-    def __crawl(self):
+    def __crawl(self, driver):
         # this private method is for testing functionality. Its content shouldn't be inherited by other bots!
-
-        driver = self.__set_driver()
 
         URL = "https://bot.incolumitas.com/"
         username = "lincoln"
@@ -145,8 +119,7 @@ class MainBot:
 
         time.sleep(30)
 
-        driver.quit()
 
+# bot = MainBot(2)
+# bot.start()
 
-bot = MainBot(2)
-bot.start()

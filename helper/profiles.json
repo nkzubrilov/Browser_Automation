@@ -1,53 +1,17 @@
 [
   {
     "id": 1,
-    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2",
-    "proxy": "http://206.222.8.58:80",
-    "stealth": {
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
-      "languages": [
-        "en-US",
-        "en"
-      ],
-      "vendor": "Google Inc.",
-      "platform": "Win64",
-      "webgl_vendor": "Intel Inc.",
-      "renderer": "Intel Iris OpenGL Engine",
-      "fix_hairline": true
-    }
+    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 4",
+    "proxy": "58.27.59.249:80"
   },
   {
     "id": 2,
-    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2",
-    "proxy": "http://193.122.71.184:3128",
-    "stealth": {
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
-      "languages": [
-        "en-US",
-        "en"
-      ],
-      "vendor": "Google Inc.",
-      "platform": "Win64",
-      "webgl_vendor": "Intel Inc.",
-      "renderer": "Intel Iris OpenGL Engine",
-      "fix_hairline": true
-    }
+    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 4",
+    "proxy": "45.169.162.1:3128"
   },
   {
     "id": 3,
-    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2",
-    "proxy": "http://117.54.114.33:80",
-    "stealth": {
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
-      "languages": [
-        "en-US",
-        "en"
-      ],
-      "vendor": "Google Inc.",
-      "platform": "Win64",
-      "webgl_vendor": "Intel Inc.",
-      "renderer": "Intel Iris OpenGL Engine",
-      "fix_hairline": true
-    }
+    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 4",
+    "proxy": "151.181.91.10:80"
   }
 ]
