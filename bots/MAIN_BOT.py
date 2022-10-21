@@ -1,12 +1,11 @@
 from selenium.webdriver import ActionChains, Keys
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
+from seleniumwire import undetected_chromedriver as uc
 
-import undetected_chromedriver as uc
 import json
 import time
 import random
@@ -32,11 +31,16 @@ class MainBot:
     def _get_driver(self):
         # all the webdriver options should be in this private method
 
-        options = Options()
-        options.add_argument(f'--proxy-server={self.__profile["proxy"]}')
+        sw_options = {
+            'proxy': {
+                'http': f'http://andykaufseo:HXcWZxe83t@{self.__profile["proxy"]}',
+                'https': f'http://andykaufseo:HXcWZxe83t@{self.__profile["proxy"]}',
+                'no_proxy': 'localhost,127.0.0.1'
+            }
+        }
 
         service = Service(executable_path='../helper/chromedriver.exe')
-        driver = uc.Chrome(service=service, options=options, use_subprocess=True,
+        driver = uc.Chrome(service=service, use_subprocess=True, seleniumwire_options=sw_options,
                            user_data_dir=self.__profile["user_data_dir"])
 
         return driver
@@ -120,6 +124,5 @@ class MainBot:
         time.sleep(30)
 
 
-# bot = MainBot(2)
+# bot = MainBot(1)
 # bot.start()
-

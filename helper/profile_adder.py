@@ -8,8 +8,10 @@ with open ('profiles.json', 'r') as file:
 
 profile = {
     'id': cnt+1,
-    'user_data_dir': r'C:\Users\USER\AppData\Local\Google\Chrome\User Data\Profile 2',
-    'proxy': '51.15.242.202:8888'
+    'user_data_dir': r'C:\Users\USER\AppData\Local\Google\Chrome\User Data\Profile 5',
+    'proxy ip': '107.181.187.195:11052',
+    'proxy username': 'andykaufseo',
+    'proxy pass': 'HXcWZxe83t'
 }
 
 profiles.append(profile)
@@ -17,3 +19,4 @@ profiles.append(profile)
 with open ('profiles.json', 'w') as file:
     json.dump(profiles, file, indent=2)
 
+print('Profile', profile['id'], 'added!')
