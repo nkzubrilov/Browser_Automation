@@ -33,15 +33,15 @@ class MainBot:
 
         sw_options = {
             'proxy': {
-                'http': f'http://andykaufseo:HXcWZxe83t@{self.__profile["proxy"]}',
-                'https': f'http://andykaufseo:HXcWZxe83t@{self.__profile["proxy"]}',
+                'http': f'http://{self.__profile["proxy username"]}:{self.__profile["proxy pass"]}@{self.__profile["proxy ip"]}',
+                'https': f'http://{self.__profile["proxy username"]}:{self.__profile["proxy pass"]}@{self.__profile["proxy ip"]}',
                 'no_proxy': 'localhost,127.0.0.1'
             }
         }
 
         service = Service(executable_path='../helper/chromedriver.exe')
         driver = uc.Chrome(service=service, use_subprocess=True, seleniumwire_options=sw_options,
-                           user_data_dir=self.__profile["user_data_dir"])
+                           user_data_dir=self.__profile["user_data_dir"]+self.__profile["id folder"])
 
         return driver
 

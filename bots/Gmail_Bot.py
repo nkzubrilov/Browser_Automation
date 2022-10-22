@@ -1,6 +1,6 @@
-import time
-
 from MAIN_BOT import MainBot
+
+import time
 
 
 class GmailBot(MainBot):
@@ -9,9 +9,10 @@ class GmailBot(MainBot):
         # this method is for manual logging for every profile first time
 
         driver = super()._get_driver()
-        driver.get('https://gmail.com')
-        time.sleep(100)
+        driver.maximize_window()
+        driver.get('https://mail.google.com')
+        time.sleep(1000)
 
 
-bot = GmailBot(1)
+bot = GmailBot(2)
 bot.login()

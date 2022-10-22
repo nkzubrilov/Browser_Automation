@@ -1,23 +1,26 @@
 [
   {
     "id": 1,
-    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 5",
+    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6",
+    "id folder": "\\id 1",
     "proxy ip": "107.181.187.195:11050",
     "proxy username": "andykaufseo",
     "proxy pass": "HXcWZxe83t"
   },
   {
     "id": 2,
-    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 5",
+    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6",
+    "id folder": "\\id 2",
     "proxy ip": "107.181.187.195:11051",
     "proxy username": "andykaufseo",
     "proxy pass": "HXcWZxe83t"
   },
   {
     "id": 3,
-    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 5",
-    "proxy ip": "107.181.187.195:11052",
-    "proxy username": "andykaufseo",
-    "proxy pass": "HXcWZxe83t"
+    "user_data_dir": "C:\\Users\\USER\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 6",
+    "id folder": "\\id 3",
+    "proxy ip": "185.199.229.156:7492",
+    "proxy username": "isnzfxop",
+    "proxy pass": "p180qy63xulq"
   }
 ]

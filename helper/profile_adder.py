@@ -8,7 +8,8 @@ with open ('profiles.json', 'r') as file:
 
 profile = {
     'id': cnt+1,
-    'user_data_dir': r'C:\Users\USER\AppData\Local\Google\Chrome\User Data\Profile 5',
+    'user_data_dir': r'C:\Users\USER\AppData\Local\Google\Chrome\User Data\Profile 6',
+    'id folder': rf'\id {cnt+1}',
     'proxy ip': '107.181.187.195:11052',
     'proxy username': 'andykaufseo',
     'proxy pass': 'HXcWZxe83t'
