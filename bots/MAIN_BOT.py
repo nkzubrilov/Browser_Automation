@@ -9,10 +9,12 @@ from seleniumwire import undetected_chromedriver as uc
 import json
 import time
 import random
-import threading
 
 
 class MainBot:
+    # URL should be specified for every bot
+
+    URL = "https://bot.incolumitas.com/"
 
     def __init__(self, profile_id):
         self.profile_id = profile_id
@@ -45,30 +47,16 @@ class MainBot:
 
         return driver
 
-    def __main_thread(self):
-        driver = self._get_driver()
-        try:
-            self.__crawl(driver)
-        finally:
-            driver.quit()
-
-    def start(self):
-        # this is a method-starter that implemented multy-threading functionality
-
-            t = threading.Thread(target=self.__main_thread, name=f"Thread: {threading.active_count()}")
-            print('Running thread:', threading.active_count())
-            t.start()
-            time.sleep(5)
-
-    def __crawl(self, driver):
+    def __crawl(self):
         # this private method is for testing functionality. Its content shouldn't be inherited by other bots!
 
-        URL = "https://bot.incolumitas.com/"
         username = "lincoln"
         email = "lincoln@gmail.com"
         delay = random.random()
 
-        driver.get(URL)
+        driver = self._get_driver()
+
+        driver.get(self.URL)
         driver.maximize_window()
 
         # try:
