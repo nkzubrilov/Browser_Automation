@@ -117,6 +117,36 @@ class GmailBot(MainBot):
                 next_page_btn.click()
                 sleep(random.gauss(1.2, 0.5))
 
+    def __reply_and_forward(self, driver):
+
+        with open('../helper/replies.txt') as file:
+            replies = file.readlines()
+
+        while True:
+            try:
+                msg = driver.find_element(By.XPATH, '//div[@class="BltHke nH oy8Mbf" and @role="main"]//div[@class="yW"]//span[@class="zF"]')
+            except NoSuchElementException:
+                break
+            ActionChains(driver).move_to_element(msg).pause(random.random()).click().pause(random.random()).perform()
+            driver.implicitly_wait(3)
+
+            reply_button = driver.find_element(By.XPATH, '//span[@class="ams bkH"]')
+            ActionChains(driver).move_to_element(reply_button).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+            driver.implicitly_wait(3)
+
+            reply_text = random.choice(replies)
+            textbox = driver.find_element(By.XPATH, '//div[@class="Am aO9 Al editable LW-avf tS-tW"]')
+            send_btn = driver.find_element(By.XPATH, '//div[@class="T-I J-J5-Ji aoO v7 T-I-atl L3"]')
+
+            ActionChains(driver).move_to_element(textbox).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+            for c in reply_text:
+                textbox.send_keys(c)
+                sleep(random.gauss(1, 0.2))
+            ActionChains(driver).move_to_element(send_btn).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+            driver.implicitly_wait(3)
+
+            forward_button = driver.find_element(By.XPATH, '//span[@class="ams bkG"]')
+
     def __run(self, driver, url):
         driver.maximize_window()
         driver.get(url)
@@ -142,6 +172,13 @@ class GmailBot(MainBot):
         sleep(random.gauss(5, 2))
 
         self.__check_inbox(driver)
+
+        starred_folder = driver.find_element(By.XPATH, '//div[@class="TN bzz aHS-bnw"]/div[@class="qj "]')
+        ActionChains(driver).move_to_element(starred_folder).pause(random.random()).click().pause(random.random()). \
+            move_by_offset(230, random.randint(-50, 50)).perform()
+        sleep(random.gauss(5, 2))
+
+        self.__reply_and_forward(driver)
 
 
 bot = GmailBot(1)
