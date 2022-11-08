@@ -1,7 +1,7 @@
 from MAIN_BOT import MainBot
 
 from selenium.webdriver import ActionChains, Keys
-from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
+from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -63,16 +63,53 @@ class GmailBot(MainBot):
                     ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().perform()
                 sleep(random.gauss(0.9, 0.3))
 
-                not_spam_btn = driver.find_element(By.XPATH, '//*[@class="Bn" and text()="Not spam"]')
-                try:
-                    ActionChains(driver).move_to_element(not_spam_btn).pause(random.random()).click().pause(random.gauss(0.9, 0.3)).perform()
-                except ElementNotInteractableException:
-                    print('No more unchecked messages in spam folder')
-                    break
+            not_spam_btn = driver.find_element(By.XPATH, '//*[@class="Bn" and text()="Not spam"]')
+            try:
+                ActionChains(driver).move_to_element(not_spam_btn).pause(random.random()).click().pause(random.gauss(0.9, 0.3)).perform()
+            except ElementNotInteractableException:
+                print('No more unchecked messages in spam folder')
+                break
 
             next_page_btn = driver.find_element(By.XPATH, '//div[@class="D E G-atb PY"]//div[contains(@class, "T-I J-J5-Ji amD T-I-awG HeQuj")][2]')
             if next_page_btn.get_attribute('aria-disabled') == 'true':
                 print('No more unchecked messages in spam folder')
+                break
+            else:
+                next_page_btn.click()
+                sleep(random.gauss(1.2, 0.5))
+
+    def __check_inbox(self, driver):
+
+        while True:
+            messages = driver.find_elements(By.XPATH, '//div[@class="yW"]//span[@class="zF"][1]/../../../..'
+                                                      '//span[contains(@class, "T-KT") and @aria-label!="Starred"]/../..'
+                                                      '//div[@class="yW"]//span[@class="zF"][1]')
+            checkboxes = driver.find_elements(By.XPATH, '//div[contains(@class, "ae4 aDM nH oy8Mbf")]//tr[contains(@class,'
+                                                        ' "zA zE")]//span[contains(@class, "T-KT") and @aria-label!="Starred"]')
+            elements = list(zip(messages, checkboxes))
+
+            for element in elements:
+                msg, checkbox, mail = element[0], element[1], element[0].get_attribute('email')
+
+                if len(elements) > 10 and not elements.index(element) % 3:
+                    ActionChains(driver).scroll_to_element(msg).pause(random.gauss(5, 1)).perform()
+                else:
+                    ActionChains(driver).move_to_element(msg).pause(random.gauss(5, 1)).perform()
+
+                if mail in self.__whitelist:
+                    while True:
+                        try:
+                            ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().pause(random.random()).\
+                                move_by_offset(random.randint(30, 60), random.randint(-20, 20)).perform()
+                            break
+                        except StaleElementReferenceException:
+                            checkbox = WebDriverWait(msg, 10, ignored_exceptions=(StaleElementReferenceException,)).until(
+                                EC.presence_of_element_located((By.XPATH, '/../../../..//span[contains(@class, "T-KT")]')))
+                            continue
+
+            next_page_btn = driver.find_element(By.XPATH, '//div[@class="D E G-atb"]//div[contains(@class, "T-I J-J5-Ji amD T-I-awG HeQuj")][2]')
+            if next_page_btn.get_attribute('aria-disabled') == 'true':
+                print('No more unchecked messages in inbox folder')
                 break
             else:
                 next_page_btn.click()
@@ -90,12 +127,19 @@ class GmailBot(MainBot):
         except NoSuchElementException:
             pass
         finally:
-            spam_button = driver.find_element(By.XPATH, '//div[@class="TN bzz aHS-bnv"]/div[@class="qj "]')
-            ActionChains(driver).move_to_element(spam_button).pause(random.random()).click().pause(random.random()).\
-                move_by_offset(random.randint(200, 300), random.randint(-50, 50)).perform()
+            spam_folder = driver.find_element(By.XPATH, '//div[@class="TN bzz aHS-bnv"]/div[@class="qj "]')
+            ActionChains(driver).move_to_element(spam_folder).pause(random.random()).click().pause(random.random()).\
+                move_by_offset(230, random.randint(-50, 50)).perform()
         sleep(random.gauss(5, 2))
 
         self.__check_spam(driver)
+
+        inbox_folder = driver.find_element(By.XPATH, '//div[@class="TN bzz aHS-bnt"]/div[@class="qj "]')
+        ActionChains(driver).move_to_element(inbox_folder).pause(random.random()).click().pause(random.random()). \
+            move_by_offset(230, random.randint(-50, 50)).perform()
+        sleep(random.gauss(5, 2))
+
+        self.__check_inbox(driver)
 
 
 bot = GmailBot(1)
