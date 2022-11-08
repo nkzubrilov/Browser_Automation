@@ -1,7 +1,7 @@
 from MAIN_BOT import MainBot
 
 from selenium.webdriver import ActionChains, Keys
-from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -61,7 +61,7 @@ class GmailBot(MainBot):
 
                 if mail in self.__whitelist:
                     ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().perform()
-                sleep(random.gauss(0.9, 0.3))
+                sleep(random.gauss(1, 0.3))
 
             not_spam_btn = driver.find_element(By.XPATH, '//*[@class="Bn" and text()="Not spam"]')
             try:
@@ -85,27 +85,29 @@ class GmailBot(MainBot):
                                                       '//span[contains(@class, "T-KT") and @aria-label!="Starred"]/../..'
                                                       '//div[@class="yW"]//span[@class="zF"][1]')
             checkboxes = driver.find_elements(By.XPATH, '//div[contains(@class, "ae4 aDM nH oy8Mbf")]//tr[contains(@class,'
-                                                        ' "zA zE")]//span[contains(@class, "T-KT") and @aria-label!="Starred"]')
+                                                        ' "zA zE")]//span[contains(@class, "T-KT") and @aria-label!="Starred"]'
+                                                        '/../..//div[@role="checkbox"]')
             elements = list(zip(messages, checkboxes))
 
-            for element in elements:
-                msg, checkbox, mail = element[0], element[1], element[0].get_attribute('email')
+            if elements:
+                for element in elements:
+                    msg, checkbox, mail = element[0], element[1], element[0].get_attribute('email')
 
-                if len(elements) > 10 and not elements.index(element) % 3:
-                    ActionChains(driver).scroll_to_element(msg).pause(random.gauss(5, 1)).perform()
-                else:
-                    ActionChains(driver).move_to_element(msg).pause(random.gauss(5, 1)).perform()
+                    if len(elements) > 10 and not elements.index(element) % 3:
+                        ActionChains(driver).scroll_to_element(msg).pause(random.gauss(5, 1)).perform()
+                    else:
+                        ActionChains(driver).move_to_element(msg).pause(random.gauss(5, 1)).perform()
 
-                if mail in self.__whitelist:
-                    while True:
-                        try:
-                            ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().pause(random.random()).\
-                                move_by_offset(random.randint(30, 60), random.randint(-20, 20)).perform()
-                            break
-                        except StaleElementReferenceException:
-                            checkbox = WebDriverWait(msg, 10, ignored_exceptions=(StaleElementReferenceException,)).until(
-                                EC.presence_of_element_located((By.XPATH, '/../../../..//span[contains(@class, "T-KT")]')))
-                            continue
+                    if mail in self.__whitelist:
+                        ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().perform()
+                    sleep(random.gauss(1, 0.3))
+
+                more_btn = driver.find_element(By.XPATH, '//div[@class="Cq aqL" and @gh="mtb"]//div[@class="T-I J-J5-Ji nf T-I-ax7 L3"]')
+                ActionChains(driver).move_to_element(more_btn).pause(random.random()).click().pause(random.random()).perform()
+
+                add_star = driver.find_element(By.XPATH, '//div[@class="J-N-Jz" and text()="Add star"]')
+                ActionChains(driver).move_to_element(add_star).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+                driver.implicitly_wait(1)
 
             next_page_btn = driver.find_element(By.XPATH, '//div[@class="D E G-atb"]//div[contains(@class, "T-I J-J5-Ji amD T-I-awG HeQuj")][2]')
             if next_page_btn.get_attribute('aria-disabled') == 'true':
