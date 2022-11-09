@@ -75,7 +75,7 @@ class GmailBot(MainBot):
                 print('No more unchecked messages in spam folder')
                 break
             else:
-                next_page_btn.click()
+                ActionChains(driver).move_to_element(next_page_btn).pause(random.random()).click().pause(random.random()).perform()
                 sleep(random.gauss(1.2, 0.5))
 
     def __check_inbox(self, driver):
@@ -107,45 +107,70 @@ class GmailBot(MainBot):
 
                 add_star = driver.find_element(By.XPATH, '//div[@class="J-N-Jz" and text()="Add star"]')
                 ActionChains(driver).move_to_element(add_star).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
-                driver.implicitly_wait(1)
 
             next_page_btn = driver.find_element(By.XPATH, '//div[@class="D E G-atb"]//div[contains(@class, "T-I J-J5-Ji amD T-I-awG HeQuj")][2]')
             if next_page_btn.get_attribute('aria-disabled') == 'true':
                 print('No more unchecked messages in inbox folder')
                 break
             else:
-                next_page_btn.click()
+                ActionChains(driver).move_to_element(next_page_btn).pause(random.random()).click().pause(random.random()).perform()
                 sleep(random.gauss(1.2, 0.5))
 
     def __reply_and_forward(self, driver):
 
         with open('../helper/replies.txt') as file:
             replies = file.readlines()
+        with open('../helper/forwards.txt') as file:
+            forwards = [mail.strip() for mail in file.readlines()]
 
         while True:
-            try:
-                msg = driver.find_element(By.XPATH, '//div[@class="BltHke nH oy8Mbf" and @role="main"]//div[@class="yW"]//span[@class="zF"]')
-            except NoSuchElementException:
+            while True:
+                try:
+                    msg = driver.find_element(By.XPATH, '//div[@class="BltHke nH oy8Mbf" and @role="main"]//div[@class="yW"]//span[@class="zF"]')
+                except NoSuchElementException:
+                    break
+                ActionChains(driver).move_to_element(msg).pause(random.random()).click().pause(random.random()).perform()
+                sleep(random.gauss(2, 0.5))
+
+                reply_button = driver.find_element(By.XPATH, '//span[@class="ams bkH"]')
+                ActionChains(driver).move_to_element(reply_button).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+                sleep(random.gauss(2, 0.5))
+
+                reply_text = random.choice(replies)
+                textbox = driver.find_element(By.XPATH, '//div[@class="Am aO9 Al editable LW-avf tS-tW"]')
+                send_btn = driver.find_element(By.XPATH, '//div[@class="T-I J-J5-Ji aoO v7 T-I-atl L3"]')
+
+                ActionChains(driver).move_to_element(textbox).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+                for c in reply_text:
+                    textbox.send_keys(c)
+                    sleep(abs(random.gauss(0.7, 0.2)))
+                ActionChains(driver).move_to_element(send_btn).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
+                sleep(random.gauss(2, 0.5))
+
+                forward_button = driver.find_element(By.XPATH, '//span[@class="ams bkG"]')
+                ActionChains(driver).move_to_element(forward_button).pause(random.random()).click().pause(
+                    random.gauss(1, 0.3)).perform()
+                sleep(random.gauss(2, 0.5))
+
+                forward_email = random.choice(forwards)
+                email_input_field = driver.find_element(By.XPATH, '//input[@class="agP aFw"]')
+                send_btn = driver.find_element(By.XPATH, '//div[@class="T-I J-J5-Ji aoO v7 T-I-atl L3"]')
+                ActionChains(driver).move_to_element(email_input_field).pause(random.gauss(3, 0.5)).click().\
+                    pause(random.random()).send_keys(forward_email).pause(random.gauss(1, 0.3)).scroll_to_element(send_btn).\
+                    pause(random.random()).move_to_element(send_btn).pause(random.random()).click().perform()
+                sleep(random.gauss(2, 0.5))
+
+                driver.back()
+                sleep(random.gauss(2, 0.5))
+
+            next_page_btn = driver.find_element(By.XPATH,
+                                                '//div[@class="D E G-atb PY"]//div[contains(@class, "T-I J-J5-Ji amD T-I-awG HeQuj")][2]')
+            if next_page_btn.get_attribute('aria-disabled') == 'true':
+                print('No more unchecked messages in starred folder')
                 break
-            ActionChains(driver).move_to_element(msg).pause(random.random()).click().pause(random.random()).perform()
-            driver.implicitly_wait(3)
-
-            reply_button = driver.find_element(By.XPATH, '//span[@class="ams bkH"]')
-            ActionChains(driver).move_to_element(reply_button).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
-            driver.implicitly_wait(3)
-
-            reply_text = random.choice(replies)
-            textbox = driver.find_element(By.XPATH, '//div[@class="Am aO9 Al editable LW-avf tS-tW"]')
-            send_btn = driver.find_element(By.XPATH, '//div[@class="T-I J-J5-Ji aoO v7 T-I-atl L3"]')
-
-            ActionChains(driver).move_to_element(textbox).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
-            for c in reply_text:
-                textbox.send_keys(c)
-                sleep(random.gauss(1, 0.2))
-            ActionChains(driver).move_to_element(send_btn).pause(random.random()).click().pause(random.gauss(1, 0.3)).perform()
-            driver.implicitly_wait(3)
-
-            forward_button = driver.find_element(By.XPATH, '//span[@class="ams bkG"]')
+            else:
+                ActionChains(driver).move_to_element(next_page_btn).pause(random.random()).click().pause(random.random()).perform()
+                sleep(random.gauss(1.2, 0.5))
 
     def __run(self, driver, url):
         driver.maximize_window()

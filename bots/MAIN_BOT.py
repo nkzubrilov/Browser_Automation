@@ -44,6 +44,7 @@ class MainBot:
         service = Service(executable_path='../helper/chromedriver.exe')
         driver = uc.Chrome(service=service, use_subprocess=True, seleniumwire_options=sw_options,
                            user_data_dir=self.__profile["user_data_dir"]+self.__profile["id folder"])
+        driver.implicitly_wait(5)
 
         return driver
 
