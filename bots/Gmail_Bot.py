@@ -54,10 +54,7 @@ class GmailBot(MainBot):
             for element in elements:
                 msg, checkbox, mail = element[0], element[1], element[2].get_attribute('email')
 
-                if len(elements) > 10 and not elements.index(element) % 3:
-                    ActionChains(driver).scroll_to_element(msg).pause(random.gauss(5, 1)).perform()
-                else:
-                    ActionChains(driver).move_to_element(msg).pause(random.gauss(5, 1)).perform()
+                ActionChains(driver).scroll_to_element(msg).pause(random.random()).move_to_element(msg).pause(random.gauss(5, 1)).perform()
 
                 if mail in self.__whitelist:
                     ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().perform()
@@ -93,10 +90,7 @@ class GmailBot(MainBot):
                 for element in elements:
                     msg, checkbox, mail = element[0], element[1], element[0].get_attribute('email')
 
-                    if len(elements) > 10 and not elements.index(element) % 3:
-                        ActionChains(driver).scroll_to_element(msg).pause(random.gauss(5, 1)).perform()
-                    else:
-                        ActionChains(driver).move_to_element(msg).pause(random.gauss(5, 1)).perform()
+                    ActionChains(driver).scroll_to_element(msg).pause(random.random()).move_to_element(msg).pause(random.gauss(5, 1)).perform()
 
                     if mail in self.__whitelist:
                         ActionChains(driver).move_to_element(checkbox).pause(random.random()).click().perform()
